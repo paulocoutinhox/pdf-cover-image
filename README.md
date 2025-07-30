@@ -2,6 +2,8 @@
 
 A Python script that extracts the first page (cover) from PDF files and saves them as high-quality PNG images with automatic border cropping.
 
+[![Build](https://github.com/paulocoutinhox/pdf-cover-image/actions/workflows/build.yml/badge.svg)](https://github.com/paulocoutinhox/pdf-cover-image/actions/workflows/build.yml)
+
 ## Features
 
 - Extracts the first page from PDF files as images
