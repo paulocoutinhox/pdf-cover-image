@@ -1,0 +1,65 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y poppler-utils
+
+    - name: Create virtual environment
+      run: |
+        python -m venv .venv
+        source .venv/bin/activate
+        pip install --upgrade pip
+
+    - name: Install Python dependencies
+      run: |
+        source venv/bin/activate
+        pip install -r requirements.txt
+
+    - name: Create test directories
+      run: |
+        mkdir -p input output
+
+    - name: Copy sample PDF to input
+      run: cp extras/pdf/sample.pdf input/
+
+    - name: Run PDF cover extraction
+      run: python main.py
+
+    - name: Check output files
+      run: |
+        echo "Checking if output files were created..."
+        ls -la output/
+        if [ "$(ls -A output)" ]; then
+          echo "✅ Output files created successfully"
+        else
+          echo "❌ No output files found"
+          exit 1
+        fi
+
+    - name: Upload output artifacts
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: extracted-covers
+        path: output/
+        retention-days: 7
