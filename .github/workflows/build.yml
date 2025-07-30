@@ -31,9 +31,7 @@ jobs:
         pip install --upgrade pip
 
     - name: Install Python dependencies
-      run: |
-        source .venv/bin/activate
-        pip install -r requirements.txt
+      run: pip install -r requirements.txt
 
     - name: Create test directories
       run: |
